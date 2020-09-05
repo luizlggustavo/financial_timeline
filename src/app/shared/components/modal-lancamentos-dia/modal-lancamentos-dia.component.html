@@ -1,0 +1,20 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-title>Dia {{dia?.label | date:'d/M'}}</ion-title>
+    <ion-buttons slot="end">
+      <ion-button (click)="dismissModal()">Close</ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+
+  <div class="lancamento" *ngFor="let lancamento of dia?.lancamentos">
+    <div class="overflow-ellipsis">
+      {{lancamento?.label}}
+    </div>
+    <div class="overflow-ellipsis">
+      {{lancamento?.valor | currency:'':''}}
+    </div>
+  </div>
+</ion-content>

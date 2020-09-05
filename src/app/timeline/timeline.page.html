@@ -1,0 +1,130 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-title (click)="scroll()">{{currentMonth}}</ion-title>
+    <ion-buttons slot="primary">
+      <ion-button fill="clear" color="secondary" (click)="rotate()">
+        <ion-icon name="refresh-outline"></ion-icon>
+      </ion-button>
+      <ion-button fill="clear" color="secondary">
+        {{currentYear}}
+        <ion-icon slot="end" name="calendar"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<div class="week-days-bar">
+  <div *ngFor="let weekDay of weekDaysName">{{weekDay}}</div>
+</div>
+<!-- <ion-content [scrollEvents]="true" (ionScroll)="logScrolling($event)" #ionContentScroll id="ionContentScroll"> -->
+<div class="container" #timelineContainer infinite-scroll [infiniteScrollDistance]="2" [infiniteScrollUpDistance]="1.5"
+  [infiniteScrollThrottle]="50" [scrollWindow]="false" (scrolled)="buildLaterDays($event)"
+  (scrolledUp)="buildPreviousDays($event)" [alwaysCallback]="true">
+  <!-- <ion-grid class="ion-no-padding calendar"> -->
+  <!-- <ion-row> -->
+  <!-- <ion-col size="1.714" class="ion-text-center day" [ngStyle]="{'height.px': tamanhoMinimoDia}"
+      *ngFor=" let dia of dias">
+      {{dia?.label | date:'dd'}}
+    </ion-col> -->
+
+  <!-- <ion-infinite-scroll (ionInfinite)="onScrollRight($event)">
+      <ion-infinite-scroll-content loadingSpinner="bubbles" loadingText="Carregando...">
+      </ion-infinite-scroll-content>
+    </ion-infinite-scroll> -->
+
+  <!-- </ion-row> -->
+  <!-- </ion-grid> -->
+
+  <div #container class="calendar">
+
+    <!-- <ion-infinite-scroll position="top" (ionInfinite)="onScrollLeft($event)">
+        <ion-infinite-scroll-content loadingSpinner="bubbles" loadingText="Carregando...">
+        </ion-infinite-scroll-content>
+      </ion-infinite-scroll> -->
+    <div class="day" [id]="dia?.label" *ngFor="let dia of dias" [ngStyle]="{'height.px': tamanhoMinimoDia}"
+      [class.current-day]="currentDayStyle(dia)" [class.evenMonth]="evenMonth(dia?.label)"
+      (click)="novoLancamento(dia)">
+      <div class="day-label" (click)="showLancamentosDia($event, dia)">
+        {{dia?.label | date:'dd'}}
+      </div>
+      <div class="lancamento" *ngFor="let lancamento of dia?.lancamentos; let index = index"
+        (click)="alertLancamento(dia, index, lancamento, $event)">
+        <div class="overflow-ellipsis">
+          {{lancamento?.label}}
+        </div>
+        <div class="overflow-ellipsis">
+          {{lancamento?.valor | currency:'':''}}
+        </div>
+      </div>
+    </div>
+    <!-- <ion-infinite-scroll (ionInfinite)="onScrollRight($event)">
+      <ion-infinite-scroll-content loadingSpinner="bubbles" loadingText="Carregando...">
+      </ion-infinite-scroll-content>
+    </ion-infinite-scroll> -->
+
+  </div>
+
+  <!-- <div class="anos">
+    <div class="meses" #timelineContainer infinite-scroll [infiniteScrollDistance]="2" [infiniteScrollUpDistance]="1.5"
+      [infiniteScrollThrottle]="150" [scrollWindow]="false" [horizontal]="true" (scrolled)="onScrollRight($event)"
+      (scrolledUp)="onScrollLeft($event)" [alwaysCallback]="true">
+      <div class="mes" *ngFor="let dia of dias" #item>
+        <div class="days">
+          <div class="day" [ngStyle]="{'min-width.px': tamanhoMinimoDia}" (click)="novoLancamento(dia)"
+            [class.selected-day]="currentDayStyle(dia)">
+            <div class="label">{{dia?.label | date:'dd'}}</div>
+            <div class="lancamento" *ngFor="let lancamento of dia?.lancamentos; let index = index"
+              [ngStyle]="{'max-width.px': tamanhoMinimoDia}"
+              (click)="alertRemoverLancamento(dia, index, lancamento, $event)">
+              <div class="overflow-ellipsis">
+                {{lancamento?.label}}
+              </div>
+              <div class="overflow-ellipsis">
+                {{lancamento?.valor |  currency:'BRL'}}
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div> -->
+
+  <!-- <div class="anos" *ngFor="let ano of anos">
+    <div class="label">{{ano?.label}}</div>
+    <div class="meses" infinite-scroll [scrollWindow]="false" [horizontal]="true" (scrolled)="onScrollRight()"
+      (scrolledUp)="onScrollLeft()" [alwaysCallback]="true">
+      <div class="mes" *ngFor="let mes of ano?.meses">
+        <div class="label">{{mes?.label}}</div>
+        <div class="dias">
+          <div class="dia" [ngStyle]="{'min-width.px': tamanhoMinimoDia}" *ngFor="let dia of mes?.dias"
+            (click)="novoLancamento(mes, dia)">
+            <div class="label">{{dia?.label}}</div>
+            <div class="lancamento" *ngFor="let lancamento of dia?.lancamentos; let i = index"
+              [ngStyle]="{'max-width.px': tamanhoMinimoDia}" (click)="removerLancamento(mes, dia, i, $event)">
+              <div class="overflow-ellipsis">
+                {{lancamento?.label}}
+              </div>
+              <div class="overflow-ellipsis">
+                {{lancamento?.valor |  currency:'BRL'}}
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div> -->
+
+  <ion-fab horizontal="start" vertical="bottom" slot="fixed">
+    <ion-fab-button (click)="zoomOut()">
+      <ion-icon name="remove-outline"></ion-icon>
+    </ion-fab-button>
+  </ion-fab>
+
+  <ion-fab horizontal="end" vertical="bottom" slot="fixed">
+    <ion-fab-button (click)="zoomIn()">
+      <ion-icon name="add"></ion-icon>
+    </ion-fab-button>
+  </ion-fab>
+
+</div>
+<!-- </ion-content> -->
